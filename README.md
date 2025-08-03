@@ -28,6 +28,12 @@ Consultati si [Sintaxa Markdown](https://www.markdownguide.org/cheat-sheet/)
 
 ## Setup și Rulare
 - [Instrucțiuni de setup local și remote. Aici trebuiesc puse absolut toate informatiile necesare pentru a putea instala si rula proiectul. De exemplu listati aici si ce tool-uri trebuiesc instalate (Ansible, SSH config, useri, masini virtuale noi daca este cazul, etc) pasii de instal si comenzi].
+- [Cand includeti instructiuni folositi blocul de code markdown cu limbajul specific codului ]
+
+```bash
+docker run my-app
+```
+
 - [Descrieti cum ati pornit containerele si cum ati verificat ca aplicatia ruleaza corect.] 
 - [Includeti aici pasii detaliati de configurat si rulat Ansible pe masina noua]
 - [Descrieti cum verificam ca totul a rulat cu succes? Cateva comenzi prin care verificam ca Ansible a instalat ce trebuia]
