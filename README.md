@@ -13,7 +13,10 @@ Acest subpunct este OPTIONAL.
 - [Desenati in excalidraw sau in orice tool doriti arhitectura generala a proiectului si includeti aici poza cu descrierea pasilor]
 
 - Acesta este un exemplu de inserare de imagine in README.MD. Punteti imagine in directorul de imagini si o inserati asa:
+
 ![Jenkins Logo](imagini/jenkins-logo.png)
+
+Consultati si [Sintaxa Markdown](https://www.markdownguide.org/cheat-sheet/)
 
 ## Structura Proiectului
 [Aici descriem rolul fiecarui director al proiectului. Descrierea trebuie sa fie foarte pe scurt la acest pas. O sa intrati in detalii la pasii urmatori.]
