@@ -1,0 +1,1 @@
+# Script Python pentru efectuarea backup-ului logurilor de sistem.

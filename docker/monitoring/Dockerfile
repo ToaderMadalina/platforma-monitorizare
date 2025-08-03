@@ -1,0 +1,1 @@
+# Dockerfile pentru imaginea scriptului de monitorizare bash.

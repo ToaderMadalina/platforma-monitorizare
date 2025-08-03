@@ -1,0 +1,1 @@
+# Script bash pentru monitorizarea resurselor sistemului.

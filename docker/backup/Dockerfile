@@ -1,0 +1,1 @@
+# Dockerfile pentru imaginea scriptului de backup Python.

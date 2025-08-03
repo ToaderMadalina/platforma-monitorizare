@@ -1,0 +1,1 @@
+# Fișier Terraform pentru configurarea infrastructurii AWS.
