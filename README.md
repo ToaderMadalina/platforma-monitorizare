@@ -31,7 +31,14 @@ Consultati si [Sintaxa Markdown](https://www.markdownguide.org/cheat-sheet/)
 - [Cand includeti instructiuni folositi blocul de code markdown cu limbajul specific codului ]
 
 ```bash
+ls -al
 docker run my-app
+```
+
+```python
+import time
+print("Hello World")
+time.sleep(4)
 ```
 
 - [Descrieti cum ati pornit containerele si cum ati verificat ca aplicatia ruleaza corect.] 
