@@ -27,26 +27,26 @@ Consultati si [Sintaxa Markdown](https://www.markdownguide.org/cheat-sheet/)
 - `/terraform`: [Descriere rol fiecare fisier Terraform folosit]
 
 ## Setup și Rulare
-- [Instrucțiuni de setup local și remote. Aici trebuiesc puse absolut toate informatiile necesare pentru a putea instala si rula proiectul. De exemplu listati aici si ce tool-uri trebuiesc instalate (Ansible, SSH config, useri, masini virtuale noi daca este cazul, etc) pasii de instal si poze].
-- [Includeti aici pasii detaliati de rulat Ansible (install, setup si comenzi si poze)]
-- [Descrieti cum verificam ca totul a rulat cu succes? Cateva comenzi prin care verificam ca Ansible a instalat ce trebuia (si poze) ]
+- [Instrucțiuni de setup local și remote. Aici trebuiesc puse absolut toate informatiile necesare pentru a putea instala si rula proiectul. De exemplu listati aici si ce tool-uri trebuiesc instalate (Ansible, SSH config, useri, masini virtuale noi daca este cazul, etc) pasii de instal si comenzi].
+- [Descrieti cum ati pornit containerele si cum ati verificat ca aplicatia ruleaza corect.] 
+- [Includeti aici pasii detaliati de configurat si rulat Ansible pe masina noua]
+- [Descrieti cum verificam ca totul a rulat cu succes? Cateva comenzi prin care verificam ca Ansible a instalat ce trebuia]
 
 ## CI/CD și Automatizari
-- [Descriere pipeline-uri Jenkins. Puneti aici cat mai detaliat ce face fiecare pipeline de jenkins cu poze facute la build-urile rulate. Detaliati cat puteti de mult procesul de CI/CD folosit.]
-- [Detaliati cum se instaleaza si ruleaza in Jenkins aceste pipeline-uri.]
-- [Poze si detalii cu restul cerintelor de CI/CD (cum ati creat userul nou ce are access doar la resurseel proiectului, cum ati creat un View now pentru proiect, etc)]
+- [Descriere pipeline-uri Jenkins. Puneti aici cat mai detaliat ce face fiecare pipeline de jenkins cu poze facute la pipeline in Blue Ocean. Detaliati cat puteti de mult procesul de CI/CD folosit.]
+- [Detalii cu restul cerintelor de CI/CD (cum ati creat userul nou ce are access doar la resursele proiectului, cum ati creat un View now pentru proiect, etc)]
 - [Daca ati implementat si punctul E optional atunci detaliati si setupul de minikube.]
 
 
 ## Terraform și AWS
+- [Prerequiste]
 - [Instrucțiuni pentru rularea Terraform și configurarea AWS]
 - [Daca o sa folositi pentru testare localstack in loc de AWS real puneti aici toti pasii pentru install localstack.]
-- [FOARTE IMPORTANT: Listati aici pas cu pas cum ati rulat si testat aplicatia, cu instructiunile folosite si poze concrete ale rularilor voastre.] 
+- [Adaugati instructiunile pentru ca verifica faptul ca Terraform a creat corect infrastructura]
 
 ## Depanare si investigarea erorilor
-- [Unde sunt logate mesajele]
-- [Orice considerati util ca informatie legat de logare]
-- [Cum accesam logurile aplicatiei si cum ne logam pe fiecare container pentru eventualele depanari de probleme] 
+- [Descrieti cum putem accesa logurile aplicatiei si cum ne logam pe fiecare container pentru eventualele depanari de probleme]
+- [Descrieti cum ati gandit logurile (formatul logurilor, levelul de log)]
 
 
 ## Resurse
