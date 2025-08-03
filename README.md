@@ -36,4 +36,9 @@ Acest subpunct este OPTIONAL.
 - [Unde sunt logate mesajele]
 - [Orice considerati util ca informatie legat de logare]
 - [Cum accesam logurile aplicatiei si cum ne logam pe fiecare container pentru eventualele depanari de probleme] 
-        
+
+
+## Resurse
+- [Listati aici orice link catre o resursa externa il considerti relevant]
+- Exemplu de URL:
+- [Sintaxa Markdown](https://www.markdownguide.org/cheat-sheet/)
