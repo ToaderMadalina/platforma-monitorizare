@@ -9,7 +9,7 @@
 - [Descriere detaliata a scopului proiectului. ]
 
 ### Arhitectura proiectului
-Acest subpunct este OPTIONAL.
+Acest subpunct este BONUS.
 - [Desenati in excalidraw sau in orice tool doriti arhitectura generala a proiectului si includeti aici poza cu descrierea pasilor]
 
 - Acesta este un exemplu de inserare de imagine in README.MD. Punteti imagine in directorul de imagini si o inserati asa:
@@ -27,8 +27,8 @@ Consultati si [Sintaxa Markdown](https://www.markdownguide.org/cheat-sheet/)
 - `/terraform`: [Descriere rol fiecare fisier Terraform folosit]
 
 ## Setup și Rulare
-- [Instrucțiuni de setup local și remote. Aici trebuiesc puse absolut toate informatiile necesare pentru a putea instala si rula proiectul pe o instanta de Ubuntu complet noua. De exemplu listati aici si ce tool-uri trebuiesc instalate (Ansible, SSH config, useri, masini virtuale noi, etc) pasii de instal si poze].
-- [Includeti aici pasii detaliati de rulat Ansible (comenzi si poze)]
+- [Instrucțiuni de setup local și remote. Aici trebuiesc puse absolut toate informatiile necesare pentru a putea instala si rula proiectul. De exemplu listati aici si ce tool-uri trebuiesc instalate (Ansible, SSH config, useri, masini virtuale noi daca este cazul, etc) pasii de instal si poze].
+- [Includeti aici pasii detaliati de rulat Ansible (install, setup si comenzi si poze)]
 - [Descrieti cum verificam ca totul a rulat cu succes? Cateva comenzi prin care verificam ca Ansible a instalat ce trebuia (si poze) ]
 
 ## CI/CD și Automatizari
