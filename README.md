@@ -80,3 +80,4 @@ time.sleep(4)
 - [Listati aici orice link catre o resursa externa il considerti relevant]
 - Exemplu de URL:
 - [Sintaxa Markdown](https://www.markdownguide.org/cheat-sheet/)
+- [Schelet Proiect] (https://github.com/amihai/platforma-monitorizare)
