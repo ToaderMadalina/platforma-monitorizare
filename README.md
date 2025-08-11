@@ -12,7 +12,7 @@
 Acest subpunct este BONUS.
 - [Desenati in excalidraw sau in orice tool doriti arhitectura generala a proiectului si includeti aici poza cu descrierea pasilor]
 
-- Acesta este un exemplu de inserare de imagine in README.MD. Punteti imagine in directorul de imagini si o inserati asa:
+- Acesta este un exemplu de inserare de imagine in README.MD. Puneti imagine in directorul de imagini si o inserati asa:
 
 ![Jenkins Logo](imagini/jenkins-logo.png)
 
@@ -44,6 +44,10 @@ time.sleep(4)
 - [Descrieti cum ati pornit containerele si cum ati verificat ca aplicatia ruleaza corect.] 
 - [Includeti aici pasii detaliati de configurat si rulat Ansible pe masina noua]
 - [Descrieti cum verificam ca totul a rulat cu succes? Cateva comenzi prin care verificam ca Ansible a instalat ce trebuia]
+
+## Setup și Rulare in Kubernetes
+- [Adaugati aici cateva detalii despre cum se poate rula in Kubernetes aplicatia]
+- [Bonus: Adaugati si o diagrama cu containerele si setupul de Kubernetes] 
 
 ## CI/CD și Automatizari
 - [Descriere pipeline-uri Jenkins. Puneti aici cat mai detaliat ce face fiecare pipeline de jenkins cu poze facute la pipeline in Blue Ocean. Detaliati cat puteti de mult procesul de CI/CD folosit.]
