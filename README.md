@@ -5,6 +5,7 @@
 **Pentru a clona acest proiect creati propriul vostru proiect EMPTY in gihub si rulati:**
 ```bash
 git clone git@github.com:amihai/platforma-monitorizare.git
+cd platforma-monitorizar
 git remote -v
 git remote remove origin
 git remote add origin:<USERUL_VOSTRU>/platforma-monitorizare.git
