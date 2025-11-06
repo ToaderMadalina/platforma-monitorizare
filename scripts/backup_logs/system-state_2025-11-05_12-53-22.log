@@ -1,0 +1,27 @@
+Date & Time: 2025-11-05 12:18:05
+Hostname: tsm
+Memory Usage:
+               total        used        free      shared  buff/cache   available
+Mem:            13Gi       1.8Gi        10Gi        45Mi       1.9Gi        11Gi
+ CPU Info:
+Load average (1/5/15 min):  0.30, 0.29, 0.26
+Top 3 CPU-consuming processes:
+    PID COMMAND         %CPU %MEM
+   4939 gnome-shell      7.7  2.5
+   6318 gedit            7.5  0.3
+    771 java             7.1  6.3
+----------------------------------------------
+Disk Usage:
+Filesystem        Size  Used Avail Use% Mounted on
+total             555G  236G  317G  43% -
+----------------------------------------------
+Active Processes: 219
+----------------------------------------------
+Network Interfaces:
+lo 127.0.0.1/8
+enp0s3 10.0.2.15/24
+enp0s8 192.168.56.102/24
+docker0 172.17.0.1/16
+br-2af4de25db1c 192.168.49.1/24
+br-83326fabc1c5 172.18.0.1/16
+==============================================
