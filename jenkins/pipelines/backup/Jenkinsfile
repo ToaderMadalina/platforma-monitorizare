@@ -1,10 +1,7 @@
-// Jenkinsfile - CI/CD pipeline pentru scriptul Python de backup
-
 pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
         IMAGE_NAME = 'toadermadalina/backup-image'
     }
 
@@ -26,7 +23,11 @@ pipeline {
         stage('Docker Login') {
             steps {
                 echo 'Autentificare în Docker Hub...'
-                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    '''
+                }
             }
         }
 
