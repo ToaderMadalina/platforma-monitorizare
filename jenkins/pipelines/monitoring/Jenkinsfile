@@ -50,16 +50,19 @@ pipeline {
         }
 
         stage('Docker Login & Push') {
-            steps {
-                echo 'Autentificare in Docker Hub si push...'
-                withCredentials([string(credentialsId: 'dockerhub-creds', variable: 'DOCKER_PASS')]) {
-                    sh '''
-                        echo $DOCKER_PASS | docker login -u madalinatoader --password-stdin
-                        docker push madalinatoader/monitorizare-image
-                    '''
-                }
-            }
-        }
+   	    steps {
+       		 echo 'Autentificare in Docker Hub si push...'
+        	 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', 
+                                          usernameVariable: 'DOCKER_USER', 
+                                          passwordVariable: 'DOCKER_PASS')]) {
+            	   sh '''
+                	echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                	docker push $DOCKER_USER/monitorizare-image
+            	   '''
+        	}
+    	    }
+	}
+
 
         stage('Deploy') {
             steps {
