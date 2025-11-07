@@ -1,1 +1,58 @@
 # Pipeline Jenkins pentru CI/CD al scriptului python de backup.
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
+        IMAGE_NAME = 'backup-image'
+        DOCKERHUB_REPO = 'username/backup-image'  // înlocuiește cu user-ul tău Docker Hub
+    }
+
+    stages {
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${IMAGE_NAME}", "./jenkins/backup")  // folderul unde e Dockerfile-ul
+                }
+            }
+        }
+
+        stage('Login to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
+                        echo "Logged in to Docker Hub"
+                    }
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
+                        docker.image("${IMAGE_NAME}").push("latest")
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sshagent(['ssh-ansible-key']) {  // aici trebuie să ai un SSH key creat în Jenkins
+                    sh 'ssh ansible@192.168.1.12 "sudo docker run --rm -v /docker/backup/data:/backup backup-image python3 /usr/local/bin/backup.py"'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline ran successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
+
