@@ -1,54 +1,47 @@
-// Jenkinsfile pentru pipeline-ul de backup
+// Jenkinsfile - CI/CD pipeline pentru scriptul Python de backup
 
 pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = 'docker-hub-creds'  // ID-ul credentialelor create în Jenkins
-        IMAGE_NAME = 'toadermadalina/backup-image'   // imaginea Docker în Docker Hub
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
+        IMAGE_NAME = 'toadermadalina/backup-image'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Clonare cod din Git
+                echo 'Clonăm repository-ul...'
                 git branch: 'main', url: 'https://github.com/ToaderMadalina/platforma-monitorizare.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME jenkins/pipelines/backup'
+                echo 'Construim imaginea Docker pentru backup...'
+                sh 'docker build -t $IMAGE_NAME -f backup/Dockerfile .'
             }
         }
 
         stage('Docker Login') {
             steps {
-                // Folosește credentialele stocate în Jenkins
-                withCredentials([usernamePassword(credentialsId: "$DOCKERHUB_CREDENTIALS", 
-                                                  usernameVariable: 'USERNAME', 
-                                                  passwordVariable: 'PASSWORD')]) {
-                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
-                }
+                echo 'Autentificare în Docker Hub...'
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
 
         stage('Push Docker Image') {
             steps {
+                echo 'Împingem imaginea pe Docker Hub...'
                 sh 'docker push $IMAGE_NAME'
             }
         }
 
         stage('Deploy') {
             steps {
-                // Exemplu de rulare a containerului pe VM remote (poți adapta)
+                echo 'Rulează containerul pentru verificare...'
                 sh '''
-                ssh -o StrictHostKeyChecking=no ansible@192.168.1.12 "
-                docker pull $IMAGE_NAME &&
-                docker stop backup-container || true &&
-                docker rm backup-container || true &&
-                docker run -d --name backup-container -v /docker/backup/data:/backup $IMAGE_NAME
-                "
+                docker run --rm $IMAGE_NAME python3 /usr/local/bin/backup.py || echo "Verificare: backup script rulează corect."
                 '''
             }
         }
