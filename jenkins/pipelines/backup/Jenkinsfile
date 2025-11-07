@@ -1,57 +1,65 @@
-# Pipeline Jenkins pentru CI/CD al scriptului python de backup.
+// Jenkinsfile pentru pipeline-ul de backup
+
 pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
-        IMAGE_NAME = 'backup-image'
-        DOCKERHUB_REPO = 'username/backup-image'  // înlocuiește cu user-ul tău Docker Hub
+        DOCKERHUB_CREDENTIALS = 'docker-hub-creds'  // ID-ul credentialelor create în Jenkins
+        IMAGE_NAME = 'toadermadalina/backup-image'   // imaginea Docker în Docker Hub
     }
 
     stages {
-        stage('Build Docker Image') {
+        stage('Checkout') {
             steps {
-                script {
-                    docker.build("${IMAGE_NAME}", "./jenkins/backup")  // folderul unde e Dockerfile-ul
-                }
+                // Clonare cod din Git
+                git branch: 'main', url: 'https://github.com/ToaderMadalina/platforma-monitorizare.git'
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage('Build Docker Image') {
             steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
-                        echo "Logged in to Docker Hub"
-                    }
+                sh 'docker build -t $IMAGE_NAME jenkins/pipelines/backup'
+            }
+        }
+
+        stage('Docker Login') {
+            steps {
+                // Folosește credentialele stocate în Jenkins
+                withCredentials([usernamePassword(credentialsId: "$DOCKERHUB_CREDENTIALS", 
+                                                  usernameVariable: 'USERNAME', 
+                                                  passwordVariable: 'PASSWORD')]) {
+                    sh 'echo $PASSWORD | docker login -u $USERNAME --password-stdin'
                 }
             }
         }
 
         stage('Push Docker Image') {
             steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
-                        docker.image("${IMAGE_NAME}").push("latest")
-                    }
-                }
+                sh 'docker push $IMAGE_NAME'
             }
         }
 
         stage('Deploy') {
             steps {
-                sshagent(['ssh-ansible-key']) {  // aici trebuie să ai un SSH key creat în Jenkins
-                    sh 'ssh ansible@192.168.1.12 "sudo docker run --rm -v /docker/backup/data:/backup backup-image python3 /usr/local/bin/backup.py"'
-                }
+                // Exemplu de rulare a containerului pe VM remote (poți adapta)
+                sh '''
+                ssh -o StrictHostKeyChecking=no ansible@192.168.1.12 "
+                docker pull $IMAGE_NAME &&
+                docker stop backup-container || true &&
+                docker rm backup-container || true &&
+                docker run -d --name backup-container -v /docker/backup/data:/backup $IMAGE_NAME
+                "
+                '''
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline ran successfully!'
+            echo 'Pipeline finalizat cu succes!'
         }
         failure {
-            echo 'Pipeline failed!'
+            echo 'Pipeline eșuat!'
         }
     }
 }
