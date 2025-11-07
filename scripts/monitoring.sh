@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 # Script bash pentru monitorizarea resurselor sistemului.
 
 # Set update time to 5 seconds
