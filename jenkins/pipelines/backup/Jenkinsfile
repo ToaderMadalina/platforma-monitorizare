@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "madalinatoader/salut.alpine"
+        DOCKER_IMAGE = "madalinatoader/backup-pipeline"
     }
 
     stages {
