@@ -2,76 +2,57 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_USER = 'madalinatoader'
+        IMAGE_NAME = "madalinatoader/monitorizare-image"
+        IMAGE_TAG = "latest"
     }
 
     stages {
-        stage('Declarative: Checkout SCM') {
-            steps {
-                checkout([$class: 'GitSCM',
-                    branches: [[name: 'main']],
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/ToaderMadalina/platforma-monitorizare.git',
-                        credentialsId: 'dockerhub-creds'
-                    ]]
-                ])
-            }
-        }
-
         stage('Checkout SCM') {
             steps {
                 echo 'Clonam repository-ul...'
-                git branch: 'main',
-                    url: 'https://github.com/ToaderMadalina/platforma-monitorizare.git'
+                checkout([$class: 'GitSCM', 
+                          branches: [[name: '*/main']], 
+                          userRemoteConfigs: [[url: 'https://github.com/ToaderMadalina/platforma-monitorizare.git',
+                                               credentialsId: 'dockerhub-creds']]])
             }
         }
 
         stage('Lint Bash Script') {
             steps {
                 echo 'Verificam scriptul de monitorizare...'
-                script {
-                    if (sh(script: "command -v shellcheck || true", returnStatus: true) == 0) {
-                        sh 'shellcheck scripts/monitoring.sh'
-                    } else {
-                        echo 'ShellCheck nu este instalat, se omite verificarea.'
-                    }
-                }
+                sh '''
+                    command -v shellcheck || echo "ShellCheck nu este instalat, se omite verificarea."
+                    shellcheck scripts/monitoring.sh || true
+                '''
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 echo 'Construim imaginea Docker...'
-                sh '''
-                    docker build -t madalinatoader/monitorizare-image \
-                    -f jenkins/pipelines/monitoring/Dockerfile .
-                '''
+                sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -f jenkins/pipelines/monitoring/Dockerfile ."
             }
         }
 
         stage('Docker Login & Push') {
-   	    steps {
-       		 echo 'Autentificare in Docker Hub si push...'
-        	 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', 
-                                          usernameVariable: 'DOCKER_USER', 
-                                          passwordVariable: 'DOCKER_PASS')]) {
-            	   sh '''
-                	echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                	docker push $DOCKER_USER/monitorizare-image
-            	   '''
-        	}
-    	    }
-	}
-
+            steps {
+                echo 'Autentificare in Docker Hub si push...'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', 
+                                                  usernameVariable: 'DOCKER_USER', 
+                                                  passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                        docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                    '''
+                }
+            }
+        }
 
         stage('Deploy') {
             steps {
                 echo 'Deploy local (sau pe server remote)...'
                 sh '''
-                    docker run --rm \
-                    -v /docker/monitoring/data:/data \
-                    madalinatoader/monitorizare-image \
-                    /bin/sh /app/monitoring.sh
+                    docker run --rm -v /docker/monitoring/data:/data ${IMAGE_NAME}:${IMAGE_TAG} /bin/sh /app/monitoring.sh
                 '''
             }
         }
