@@ -1,1 +1,65 @@
-# Playbook Ansible pentru rularea platformei Docker folosind docker-compose.
+---
+- name: Deploy Docker Compose platform
+  hosts: monitorizare
+  become: yes
+  become_method: sudo
+
+  vars:
+    docker_folder_remote: "/home/ansible/docker"
+
+  tasks:
+
+    - name: Ensure docker-compose plugin is installed (v2)
+      community.docker.docker_compose_v2:
+        project_src: "{{ docker_folder_remote }}"
+        state: present
+        build: "policy"          # construiește imaginea dacă nu există
+        remove_orphans: yes
+        recreate: auto
+
+    - name: Ensure /data folder exists on VM
+      file:
+        path: /data
+        state: directory
+        owner: ansible
+        group: ansible
+        mode: '0755'
+
+    - name: Copy docker-compose.yml to VM
+      copy:
+        src: ../docker/docker-compose.yml
+        dest: "{{ docker_folder_remote }}/docker-compose.yml"
+        owner: ansible
+        group: ansible
+        mode: '0644'
+
+    - name: Run docker-compose up detached
+      community.docker.docker_compose_v2:
+        project_src: "{{ docker_folder_remote }}"
+        state: present
+        build: "policy"
+        remove_orphans: yes
+        recreate: auto
+
+    - name: Wait for monitoring container to be running
+      shell: docker ps --filter "name=monitoring" --format '{{ "{{.Names}}" }}'
+      register: monitoring_status
+      retries: 5
+      delay: 5
+      until: "'monitoring' in monitoring_status.stdout"
+
+    - name: Wait for backup container to be running
+      shell: docker ps --filter "name=backup" --format '{{ "{{.Names}}" }}'
+      register: backup_status
+      retries: 5
+      delay: 5
+      until: "'backup' in backup_status.stdout"
+
+    - name: Show running containers
+      command: docker ps --format "table {{'{{.Names}}'}}\t{{'{{.Status}}'}}"
+      register: docker_ps
+      changed_when: false
+
+    - debug:
+        var: docker_ps.stdout
+
