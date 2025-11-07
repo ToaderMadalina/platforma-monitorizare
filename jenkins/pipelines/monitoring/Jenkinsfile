@@ -1,43 +1,46 @@
-# Pipeline Jenkins pentru CI/CD al scriptului Python.
 pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds') // ID-ul credentialelor Docker Hub din Jenkins
-        IMAGE_NAME = 'your-dockerhub-username/backup-image'
+        DOCKER_IMAGE = "madalinatoader/monitorizare-pipeline"
     }
 
     stages {
-
         stage('Checkout') {
             steps {
-                checkout scm
+                echo "Clonam repository-ul..."
+                git branch: 'main', url: 'https://github.com/ToaderMadalina/platforma-monitorizare.git'
             }
         }
 
-        stage('Syntax Check') {
+        stage('Lint Bash Script') {
             steps {
-                sh 'python3 -m py_compile scripts/backup.py'
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                // Dacă ai teste unitare în tests/ pentru backup.py
-                sh 'pytest tests/backup_test.py'
+                echo "Verificam scriptul de monitorizare..."
+                sh '''
+                    if command -v shellcheck >/dev/null 2>&1; then
+                        shellcheck scripts/monitoring.sh || true
+                    else
+                        echo "ShellCheck nu este instalat, se omite verificarea."
+                    fi
+                '''
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME -f docker/backup/Dockerfile .'
+                echo "Construim imaginea Docker..."
+                sh 'docker build -t $DOCKER_IMAGE -f jenkins/pipelines/monitorizare/Dockerfile .'
             }
         }
 
-        stage('Push Docker Image') {
+        stage('Docker Login & Push') {
             steps {
-                withDockerRegistry([credentialsId: 'dockerhub-creds', url: '']) {
-                    sh 'docker push $IMAGE_NAME'
+                echo "Autentificare si push pe Docker Hub..."
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push $DOCKER_IMAGE
+                    '''
                 }
             }
         }
@@ -45,10 +48,10 @@ pipeline {
 
     post {
         success {
-            echo 'Backup pipeline finished successfully!'
+            echo "Pipeline finalizat cu succes!"
         }
         failure {
-            echo 'Backup pipeline failed.'
+            echo "Pipeline esuat!"
         }
     }
 }
