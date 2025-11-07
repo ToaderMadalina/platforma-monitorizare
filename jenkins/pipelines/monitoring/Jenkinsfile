@@ -1,1 +1,55 @@
 # Pipeline Jenkins pentru CI/CD al scriptului Python.
+pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds') // ID-ul credentialelor Docker Hub din Jenkins
+        IMAGE_NAME = 'your-dockerhub-username/backup-image'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Syntax Check') {
+            steps {
+                sh 'python3 -m py_compile scripts/backup.py'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                // Dacă ai teste unitare în tests/ pentru backup.py
+                sh 'pytest tests/backup_test.py'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME -f docker/backup/Dockerfile .'
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                withDockerRegistry([credentialsId: 'dockerhub-creds', url: '']) {
+                    sh 'docker push $IMAGE_NAME'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Backup pipeline finished successfully!'
+        }
+        failure {
+            echo 'Backup pipeline failed.'
+        }
+    }
+}
+
