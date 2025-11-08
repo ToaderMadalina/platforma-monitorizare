@@ -2,7 +2,7 @@
 
 FROM ubuntu:22.04
 
-# Instalăm utilitare de sistem necesare
+# Instalam utilitare de sistem necesare
 RUN apt-get update && \
     apt-get install -y iproute2 procps && \
     rm -rf /var/lib/apt/lists/*
