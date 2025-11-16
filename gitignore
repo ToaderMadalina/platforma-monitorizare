@@ -1,0 +1,7 @@
+# .gitignore
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+docker/monitoring/data/
+*.log
+
